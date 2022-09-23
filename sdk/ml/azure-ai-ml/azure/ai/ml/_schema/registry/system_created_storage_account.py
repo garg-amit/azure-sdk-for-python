@@ -26,7 +26,6 @@ class SystemCreatedStorageAccountSchema(metaclass=PatchedSchemaMeta):
     @pre_dump
     def predump(self, data, **kwargs):
         from azure.ai.ml.entities import SystemCreatedStorageAccount
-
         if not isinstance(data, SystemCreatedStorageAccount):
             raise ValidationError(
                 "Cannot dump non-SystemCreatedStorageAccount object into SystemCreatedStorageAccountSchema"
