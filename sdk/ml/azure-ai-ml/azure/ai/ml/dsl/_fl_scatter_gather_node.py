@@ -4,12 +4,26 @@
 
 # pylint: disable=protected-access
 from typing import List, Dict, Optional, Union
+import importlib
 
 from azure.ai.ml.entities import PipelineJob
 from azure.ai.ml.entities._builders.fl_scatter_gather import FLScatterGather
 from azure.ai.ml.entities._assets.federated_learning_silo import FederatedLearningSilo
 from azure.ai.ml.entities import CommandComponent
 from azure.ai.ml._utils._experimental import experimental
+
+
+def _check_for_import(package_name):
+    try:
+        # pylint: disable=unused-import
+        importlib.import_module(package_name)
+    except ImportError:
+        raise ImportError(
+            "The DSL FL Node has an additional requirement above the rest of the "
+            + "AML SDK repo in that the mldesigner package is required. Please run `pip install mldesigner` "
+            + "and try again."
+        )
+
 
 @experimental
 def fl_scatter_gather(
@@ -27,13 +41,16 @@ def fl_scatter_gather(
     _create_default_mappings_if_needed: bool = False,
     **kwargs,
 ):
-    """A federated learning scatter-gather subgraph node. It's assumed that this will be used inside of
+    """USAGE WARNING: Using this node directly from the SDK repo requires that the user have the 'mldesigner'
+    package installed, which is not a standard dependency of this package.
+
+    A federated learning scatter-gather subgraph node. It's assumed that this will be used inside of
     a @pipeline-decorated function in order to create a subgraph which will:
         - Execute a specified pipeline step multiple times (the silo step), with each execution using slightly
             different inputs, datatstores, and computes based on an inputted config.
         - Merge the outputs of the multiple silo steps into a single input for another step (the aggregation step),
             which will then process the values into a single unified result.
-        - With the process above being a 'scatter gather' sequence, iterate and perform the scatter gather 
+        - With the process above being a 'scatter gather' sequence, iterate and perform the scatter gather
             a number of times according to the max_iterations input, with the output of any given iteration's
             aggregation step being fed back into the silo steps of the subsequent iteration.
         - Return the outputs of the last iteration's aggregation step as the node's final output.
@@ -61,9 +78,9 @@ def fl_scatter_gather(
             fl_node = fl_scatter_gather(**many_inputs)
             return {"pipeline_output" : fl_node.outputs["aggregated_model"]}
 
-        submitted_pipeline_job = my_mlclient.jobs.create_or_update(fl_pipeline(), experiment_name="example_fl_pipeline")
+        submitted_pipeline_job = my_client.jobs.create_or_update(fl_pipeline(), experiment_name="example_fl_pipeline")
         ```
-    
+
     param silo_component: A pipeline step that will be run multiple
         times across different silos, as specified by the silo_configs input. In a typical
         horizontal federated learning context, this step is what will perform model
@@ -93,6 +110,9 @@ def fl_scatter_gather(
     """
     # Private kwargs:
     # _create_default_mappings_if_needed: if true, then try to automatically create i/o mappings if they're unset.
+
+    # check that mldesigner is available
+    _check_for_import("mldesigner")
 
     # Like other DSL nodes, this is just a wrapper around a node builder entity initializer.
     return FLScatterGather(

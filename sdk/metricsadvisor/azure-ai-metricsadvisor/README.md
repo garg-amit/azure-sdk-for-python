@@ -6,7 +6,12 @@ Metrics Advisor is a scalable real-time time series monitoring, alerting, and ro
 - Configure and fine-tune the anomaly detection model used on your data
 - Diagnose anomalies and help with root cause analysis
 
-[Source code][src_code] | [Package (Pypi)][package] | [API reference documentation][reference_documentation] | [Product documentation][ma_docs] | [Samples][samples_readme]
+[Source code][src_code]
+| [Package (Pypi)][package]
+| [Package (Conda)](https://anaconda.org/microsoft/azure-ai-metricsadvisor/)
+| [API reference documentation][reference_documentation]
+| [Product documentation][ma_docs]
+| [Samples][samples_readme]
 
 ## _Disclaimer_
 
@@ -47,9 +52,11 @@ api_key = os.getenv("METRICS_ADVISOR_API_KEY")
 client = MetricsAdvisorClient(service_endpoint,
                               MetricsAdvisorKeyCredential(subscription_key, api_key))
 ```
+
 <!-- END SNIPPET -->
 
 <!-- SNIPPET:sample_authentication.administration_client_with_metrics_advisor_credential -->
+
 ```python
 from azure.ai.metricsadvisor import MetricsAdvisorKeyCredential, MetricsAdvisorAdministrationClient
 
@@ -379,9 +386,11 @@ for result in results:
     print("Create time: {}".format(result.created_time))
 return tolist
 ```
+
 <!-- END SNIPPET -->
 
 <!-- SNIPPET:sample_alert_configuration.list_anomalies_for_alert -->
+
 ```python
 from azure.ai.metricsadvisor import MetricsAdvisorKeyCredential, MetricsAdvisorClient
 
@@ -507,9 +516,11 @@ api_key = os.getenv("METRICS_ADVISOR_API_KEY")
 client = MetricsAdvisorClient(service_endpoint,
                               MetricsAdvisorKeyCredential(subscription_key, api_key))
 ```
+
 <!-- END SNIPPET -->
 
 <!-- SNIPPET:sample_authentication_async.administration_client_with_metrics_advisor_credential_async -->
+
 ```python
 from azure.ai.metricsadvisor import MetricsAdvisorKeyCredential
 from azure.ai.metricsadvisor.aio import MetricsAdvisorAdministrationClient

@@ -30,7 +30,7 @@ def parallel_for(*, body, items, **kwargs):
                     items=[
                         {"loop_body_input": 1},
                         {"loop_body_input": 2},
-                    ]
+                    ],
                 )
 
                 # collect aggregated output from loop body

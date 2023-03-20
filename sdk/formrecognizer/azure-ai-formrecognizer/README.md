@@ -8,7 +8,12 @@ Azure Form Recognizer is a cloud service that uses machine learning to analyze t
 - Prebuilt - Extract common field values from select document types (ex. receipts, invoices, business cards, ID documents, U.S. W-2 tax documents, among others) using prebuilt models.
 - Custom - Build custom models from your own data to extract tailored field values in addition to general layout from documents.
 
-[Source code][python-fr-src] | [Package (PyPI)][python-fr-pypi] | [API reference documentation][python-fr-ref-docs] | [Product documentation][python-fr-product-docs] | [Samples][python-fr-samples]
+[Source code][python-fr-src]
+| [Package (PyPI)][python-fr-pypi]
+| [Package (Conda)](https://anaconda.org/microsoft/azure-ai-formrecognizer/)
+| [API reference documentation][python-fr-ref-docs]
+| [Product documentation][python-fr-product-docs]
+| [Samples][python-fr-samples]
 
 ## _Disclaimer_
 
@@ -212,7 +217,6 @@ The following section provides several code snippets covering some of the most c
 
 Extract text, selection marks, text styles, and table structures, along with their bounding region coordinates, from documents.
 
-<!-- SNIPPET:sample_analyze_layout.extract_layout -->
 ```python
 from azure.core.credentials import AzureKeyCredential
 from azure.ai.formrecognizer import DocumentAnalysisClient
@@ -251,7 +255,7 @@ for page in result.pages:
                 line_idx,
                 len(words),
                 line.content,
-                format_polygon(line.polygon),
+                line.polygon,
             )
         )
 
@@ -266,7 +270,7 @@ for page in result.pages:
         print(
             "...Selection mark is '{}' within bounding polygon '{}' and has a confidence of {}".format(
                 selection_mark.state,
-                format_polygon(selection_mark.polygon),
+                selection_mark.polygon,
                 selection_mark.confidence,
             )
         )
@@ -282,7 +286,7 @@ for table_idx, table in enumerate(result.tables):
             "Table # {} location on page: {} is {}".format(
                 table_idx,
                 region.page_number,
-                format_polygon(region.polygon),
+                region.polygon,
             )
         )
     for cell in table.cells:
@@ -297,20 +301,18 @@ for table_idx, table in enumerate(result.tables):
             print(
                 "...content on page {} is within bounding polygon '{}'".format(
                     region.page_number,
-                    format_polygon(region.polygon),
+                    region.polygon,
                 )
             )
 
 print("----------------------------------------")
 ```
-<!-- END SNIPPET -->
 
 ### Using the General Document Model
 
 Analyze key-value pairs, tables, styles, and selection marks from documents using the general document model provided by the Form Recognizer service.
 Select the General Document Model by passing `model_id="prebuilt-document"` into the `begin_analyze_document` method:
 
-<!-- SNIPPET:sample_analyze_general_documents.analyze_general_documents -->
 ```python
 from azure.core.credentials import AzureKeyCredential
 from azure.ai.formrecognizer import DocumentAnalysisClient
@@ -338,14 +340,14 @@ for kv_pair in result.key_value_pairs:
         print(
                 "Key '{}' found within '{}' bounding regions".format(
                     kv_pair.key.content,
-                    format_bounding_region(kv_pair.key.bounding_regions),
+                    kv_pair.key.bounding_regions,
                 )
             )
     if kv_pair.value:
         print(
                 "Value '{}' found within '{}' bounding regions\n".format(
                     kv_pair.value.content,
-                    format_bounding_region(kv_pair.value.bounding_regions),
+                    kv_pair.value.bounding_regions,
                 )
             )
 
@@ -364,7 +366,7 @@ for page in result.pages:
                 line_idx,
                 len(words),
                 line.content,
-                format_polygon(line.polygon),
+                line.polygon,
             )
         )
 
@@ -379,7 +381,7 @@ for page in result.pages:
         print(
             "...Selection mark is '{}' within bounding polygon '{}' and has a confidence of {}".format(
                 selection_mark.state,
-                format_polygon(selection_mark.polygon),
+                selection_mark.polygon,
                 selection_mark.confidence,
             )
         )
@@ -395,7 +397,7 @@ for table_idx, table in enumerate(result.tables):
             "Table # {} location on page: {} is {}".format(
                 table_idx,
                 region.page_number,
-                format_polygon(region.polygon),
+                region.polygon,
             )
         )
     for cell in table.cells:
@@ -410,12 +412,11 @@ for table_idx, table in enumerate(result.tables):
             print(
                 "...content on page {} is within bounding polygon '{}'\n".format(
                     region.page_number,
-                    format_polygon(region.polygon),
+                    region.polygon,
                 )
             )
 print("----------------------------------------")
 ```
-<!-- END SNIPPET -->
 
 - Read more about the features provided by the `prebuilt-document` model [here][service_prebuilt_document].
 

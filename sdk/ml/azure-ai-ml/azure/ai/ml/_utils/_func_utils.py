@@ -31,8 +31,7 @@ class PersistentLocalsFunctionBuilder(abc.ABC):
         raise NotImplementedError()
 
     def call(self, func, _all_kwargs) -> Tuple[Any, dict]:
-        """Get outputs and locals in calling func with _all_kwargs.
-        Locals will be used to update node variable names.
+        """Get outputs and locals in calling func with _all_kwargs. Locals will be used to update node variable names.
 
         :param func: The function to execute.
         :type func: Union[FunctionType, MethodType]
@@ -216,9 +215,8 @@ try:
             return pieces
 
         def _build_func(self, func: Union[FunctionType, MethodType]) -> PersistentLocalsFunction:
-            """Build a persistent locals function from the given function.
-            Use bytecode injection to add try...finally statement around code to
-            persistent the locals in the function.
+            """Build a persistent locals function from the given function. Use bytecode injection to add try...finally
+            statement around code to persistent the locals in the function.
 
             It will change the func bytecode in this way:
                 def func(__self, *func_args):
@@ -273,8 +271,7 @@ except ImportError:
 
 
 def get_outputs_and_locals(func, _all_kwargs):
-    """Get outputs and locals from self.func.
-    Locals will be used to update node variable names.
+    """Get outputs and locals from self.func. Locals will be used to update node variable names.
 
     :param func: The function to execute.
     :type func: Union[FunctionType, MethodType]
